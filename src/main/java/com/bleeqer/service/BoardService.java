@@ -6,7 +6,7 @@ import com.bleeqer.domain.BoardVO;
 
 public interface BoardService {
 	
-	public void register(BoardVO baord);
+	public void create(BoardVO baord);
 	
 	public BoardVO get(Long bno);
 	

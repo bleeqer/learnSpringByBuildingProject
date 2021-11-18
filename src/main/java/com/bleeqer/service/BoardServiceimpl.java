@@ -18,9 +18,9 @@ public class BoardServiceimpl implements BoardService {
 	private BoardMapper mapper;
 	
 	@Override
-	public void register(BoardVO board) {
+	public void create(BoardVO board) {
 		
-		log.info("register......" + board);
+		log.info("create......" + board);
 		
 		mapper.insertSelectKey(board);
 	}
