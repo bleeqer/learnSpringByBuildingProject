@@ -79,4 +79,9 @@ public class BoardController {
 		}
 		return "redirect:/board/list";
 	}
+	
+	@GetMapping("/create")
+	public void register() {
+		
+	}
 }
