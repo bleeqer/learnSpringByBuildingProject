@@ -46,11 +46,11 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	@GetMapping("/get")
+	@GetMapping({"/get", "/modify"})
 //	bno 값을 좀 더 명시적으로 처리하는 @RequestParam을 이용해서 지정
 	public void get(@RequestParam("bno") Long bno, Model model) {
 		
-		log.info("/get");
+		log.info("/get or /modify");
 		model.addAttribute("board", service.get(bno));
 	}
 	
