@@ -53,14 +53,14 @@
                             		</c:if>
                             		
                             		<c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-                            			<li class="paginate_button ${pagemaker.cri.pageNum == num ? "active":""}">
+                            			<li class="paginate_button ${pageMaker.cri.pageNum == num ? "active":""} ">
                             				<a href="${num}">${num}</a>
                             			</li>
                             		</c:forEach>
                             		
                             		<c:if test="${pageMaker.next}">
                             			<li class="paginate_button next">
-                            				<a href="${pagemaker.endPage +1}">Next</a>
+                            				<a href="${pageMaker.endPage +1}">Next</a>
                             			</li>
                             		</c:if>
                             	</ul>
@@ -113,23 +113,9 @@
         		$(".paginate_button a").on("click", function(e) {
         			
         			e.preventDefault();
-        			console.log('click');
         			actionForm.find("input[name='pageNum']").val($(this).attr("href"));
-        			actionForm.submit;
+        			actionForm.submit();
         		});
-        		
-        		var actionForm = $("#actionForm");
-
-				$(".paginate_button a").on("click", function(e) {
-					
-					/* 태그의 디폴트 기능 실행 막기 */
-					e.preventDefault();
-
-					console.log('click');
-
-					actionForm.find("input[name='pageNum']").val($(this).attr("href"));
-					actionForm.submit();
-					});
 				
 				$(".move").on("click", function(e) {
 					

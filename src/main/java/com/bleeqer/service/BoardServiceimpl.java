@@ -58,6 +58,14 @@ public class BoardServiceimpl implements BoardService {
 		return mapper.delete(bno) == 1;
 	}
 	
+	@Override
+	public int getTotal(Criteria cri) {
+		
+		log.info("get total count");
+		
+		return mapper.getTotalCount(cri);
+	}
+	
 
 
 }
