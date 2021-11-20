@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.bleeqer.domain.BoardVO;
+import com.bleeqer.domain.Criteria;
 import com.bleeqer.mapper.BoardMapper;
 
 import lombok.AllArgsConstructor;
@@ -26,11 +27,11 @@ public class BoardServiceimpl implements BoardService {
 	}
 	
 	@Override
-	public List<BoardVO> getList() {
+	public List<BoardVO> getList(Criteria cri) {
 		
 		log.info("getList........");
 		
-		return mapper.getList();
+		return mapper.getListWithPaging(cri);
 	}
 	
 	@Override

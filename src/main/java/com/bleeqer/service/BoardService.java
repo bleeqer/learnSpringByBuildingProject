@@ -3,6 +3,7 @@ package com.bleeqer.service;
 import java.util.List;
 
 import com.bleeqer.domain.BoardVO;
+import com.bleeqer.domain.Criteria;
 
 public interface BoardService {
 	
@@ -14,6 +15,6 @@ public interface BoardService {
 	
 	public boolean remove(Long bno);
 	
-	public List<BoardVO> getList();
+	public List<BoardVO> getList(Criteria cri);
 	
 }

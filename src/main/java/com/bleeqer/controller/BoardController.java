@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bleeqer.domain.BoardVO;
+import com.bleeqer.domain.Criteria;
 import com.bleeqer.service.BoardService;
 
 import lombok.Setter;
@@ -27,10 +28,10 @@ public class BoardController {
 	
 
 	@GetMapping("/list")
-	public void list(Model model) {
+	public void list(Criteria cri, Model model) {
 		
-		log.info("list");
-		model.addAttribute("list", service.getList());
+		log.info("list" + cri);
+		model.addAttribute("list", service.getList(cri));
 	}
 	
 	@PostMapping("/create")
