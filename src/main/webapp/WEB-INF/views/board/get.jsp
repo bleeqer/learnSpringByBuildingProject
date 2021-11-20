@@ -41,12 +41,15 @@
           <label>Writer</label> 
           <input class="form-control" name='writer' value='<c:out value="${board.writer }"/>' readonly="readonly">
         </div>
-
- 		<button data-oper='modify' class="btn btn-default">
-        <a href="/board/modify?bno=<c:out value="${board.bno}"/>">Modify</a></button>
+		
+		<!-- 추후 다양한 상황을 처리하기 위해 form 태그와 자바스크립트로 구현 -->
+ 		<button data-oper='modify' class="btn btn-default">Modify</button>
+        <button data-oper='list' class="btn btn-info">>List</button>
         
-        <button data-oper='list' class="btn btn-info">
-        <a href="/board/list">List</a></button>
+        <!-- 필요한 데이터 전달 목적 -->
+        <form id='operForm' action="/board/modify" method="get">
+        	<input type='hidden' id='bno' name='bno' value='<c:out value="${board.bno}"/>'>
+        </form>
 
 
       </div>
@@ -73,6 +76,7 @@ $(document).ready(function() {
     
   $("button[data-oper='list']").on("click", function(e){
     
+	/* 데이터가 필요 없으므로 bno 삭제하고 이동 */
     operForm.find("#bno").remove();
     operForm.attr("action","/board/list")
     operForm.submit();

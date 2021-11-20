@@ -89,7 +89,10 @@
 				console.log("삭제합니다")
 				formObj.attr("action", "/board/remove");
 			} else if (operation === 'list') {
-				self.location = "/board/list"
+				/* list로 이동 */
+				formObj.attr("action", "/board/list").attr("method", "get");
+				/* form의 모든 내용 비움 */
+				formObj.empty();
 			}
 			formObj.submit();
 		})
