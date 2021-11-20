@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bleeqer.domain.BoardVO;
 import com.bleeqer.domain.Criteria;
+import com.bleeqer.domain.PageDTO;
 import com.bleeqer.service.BoardService;
 
 import lombok.Setter;
@@ -32,6 +34,9 @@ public class BoardController {
 		
 		log.info("list" + cri);
 		model.addAttribute("list", service.getList(cri));
+		model.addAttribute("pageMaker", new PageDTO(cri, 105));
+		
+		System.out.println(cri);
 	}
 	
 	@PostMapping("/create")
@@ -49,7 +54,8 @@ public class BoardController {
 	
 	@GetMapping({"/get", "/modify"})
 //	bno 값을 좀 더 명시적으로 처리하는 @RequestParam을 이용해서 지정
-	public void get(@RequestParam("bno") Long bno, Model model) {
+//	@ModelAttribute는 Model 객체에 지정한이름으로("cri") 자동으로 데이터를 담아줌 
+	public void get(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
 		
 		log.info("/get or /modify");
 		model.addAttribute("board", service.get(bno));
@@ -57,7 +63,7 @@ public class BoardController {
 	
 	@PostMapping("/modify")
 //	bno 값을 좀 더 명시적으로 처리하는 @RequestParam을 이용해서 지정
-	public String modify(BoardVO board, RedirectAttributes rttr) {
+	public String modify(BoardVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		
 		log.info("modify: " + board);
 		
@@ -66,11 +72,15 @@ public class BoardController {
 			rttr.addFlashAttribute("result", "success");
 		}
 		
+		rttr.addAttribute("pageNum", cri.getPageNum());
+		rttr.addAttribute("amount", cri.getAmount());
+		
+		
 		return "redirect:/board/list";
 	}
 	
 	@PostMapping("/remove")
-	public String remove(@RequestParam("bno") Long bno, RedirectAttributes rttr) {
+	public String remove(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		
 		log.info("remove..." + bno);
 		
@@ -78,6 +88,10 @@ public class BoardController {
 		if (service.remove(bno)) {
 			rttr.addFlashAttribute("result", "success");
 		}
+		
+		rttr.addAttribute("pageNum", cri.getPageNum());
+		rttr.addAttribute("amount", cri.getAmount());
+		
 		return "redirect:/board/list";
 	}
 	

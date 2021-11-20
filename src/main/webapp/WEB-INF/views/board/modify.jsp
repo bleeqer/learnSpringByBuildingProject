@@ -54,11 +54,15 @@
 	          <label>Update Date</label> 
 	          <input class="form-control" name='updateDate' value='<fmt:formatDate pattern="yyyy/MM/dd" value="${board.updateDate}"/>' readonly="readonly">
 	        </div>
+	        
+	        <input type='hidden' name='pageNum' value='<c:out value="${cri.pageNum}"/>'>
+ 			<input type='hidden' name='amount' value='<c:out value="${cri.amount}"/>'>
 	
 	 		<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
 	 		<button type="submit" data-oper='remove' class="btn btn-default">Remove</button>
 	 		<button type="submit" data-oper='list' class="btn btn-default">List</button>
- 		
+ 			
+ 			
  		</form>
 
 
@@ -91,10 +95,22 @@
 			} else if (operation === 'list') {
 				/* list로 이동 */
 				formObj.attr("action", "/board/list").attr("method", "get");
-				/* form의 모든 내용 비움 */
+				
+				/* .clone() isn't necessarily needed */
+				var pageNumTag = $("input[name='pageNum']").clone();
+				var amountTag = $("input[name='amount']").clone();
+				
 				formObj.empty();
+				
+				formObj.append(pageNumTag);
+				formObj.append(amountTag);
+
+				
+				
+				/* form의 모든 내용 비움 */
+				/* formObj.empty(); */
 			}
-			formObj.submit();
+			/* formObj.submit(); */
 		})
 	})
 </script>
