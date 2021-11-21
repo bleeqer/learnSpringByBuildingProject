@@ -57,6 +57,8 @@
 	        
 	        <input type='hidden' name='pageNum' value='<c:out value="${cri.pageNum}"/>'>
  			<input type='hidden' name='amount' value='<c:out value="${cri.amount}"/>'>
+ 			<input type='hidden' name='keyword' value='<c:out value="${cri.keyword}"/>'>
+        	<input type='hidden' name='type' value='<c:out value="${cri.type}"/>'>
 	
 	 		<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
 	 		<button type="submit" data-oper='remove' class="btn btn-default">Remove</button>
@@ -92,6 +94,7 @@
 			if (operation === 'remove') {
 				console.log("삭제합니다")
 				formObj.attr("action", "/board/remove");
+				
 			} else if (operation === 'list') {
 				/* list로 이동 */
 				formObj.attr("action", "/board/list").attr("method", "get");
@@ -99,18 +102,20 @@
 				/* .clone() isn't necessarily needed */
 				var pageNumTag = $("input[name='pageNum']").clone();
 				var amountTag = $("input[name='amount']").clone();
+				var keywordTag = $("input[name='keyword']").clone();
+				var typeTag = $("input[name='type']").clone();
 				
 				formObj.empty();
 				
 				formObj.append(pageNumTag);
 				formObj.append(amountTag);
+				formObj.append(keywordTag);
+				formObj.append(typeTag);
 
 				
-				
-				/* form의 모든 내용 비움 */
-				/* formObj.empty(); */
+
 			}
-			/* formObj.submit(); */
+			formObj.submit();
 		})
 	})
 </script>
