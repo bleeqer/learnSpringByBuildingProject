@@ -18,4 +18,12 @@
 	<update id="update">
 		update tbl_reply set reply = #{reply}, updatedate = sysdate where rno = #{rno}
 	</update>
+	
+	<select id="getListWithPaging" resultType="com.bleeqer.domain.ReplyVO">
+		select rno, bno, reply, replyer, replyDate, updatedate
+		from tbl_reply
+		where bno = #{bno} <!-- @Param("bno")와 매칭됨
+		 -->
+		order by rno asc
+	</select>
 </mapper>
