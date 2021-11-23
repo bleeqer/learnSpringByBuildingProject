@@ -60,10 +60,18 @@ public class ReplyController {
 		return new ResponseEntity<>(service.getList(cri,  bno), HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/{rno}", produces = {
+			MediaType.APPLICATION_XML_VALUE, 
+			MediaType.APPLICATION_JSON_UTF8_VALUE})
+	public ResponseEntity<ReplyVO> get(@PathVariable("rno") Long rno) {
+
+		log.info("get: " + rno);
+
+		return new ResponseEntity<>(service.get(rno), HttpStatus.OK);
+	}
+	
 	@DeleteMapping(value = "/{rno}",
-			produces = {
-					MediaType.APPLICATION_XML_VALUE,
-					MediaType.APPLICATION_JSON_UTF8_VALUE})
+			produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> remove(
 			@PathVariable("rno") Long rno) {
 		
