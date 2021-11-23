@@ -32,7 +32,8 @@ var replyService = function(){
 		$.getJSON("/replies/pages/" + bno + "/" + page + ".json",
 				  function(data) {
 					if (callback) {
-						callback(data);
+						// callback(data);
+						callback(data.replyCnt, data.list); // 댓글 갯수와 리스트
 					}
 				}).fail(function(xhr, status, err) {
 					if (error) {

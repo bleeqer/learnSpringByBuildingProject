@@ -17,8 +17,10 @@ public interface ReplyMapper {
 	
 	public int update(ReplyVO reply);
 	
-	// 2개 이상의 데이터를 파라미터로 전달하기위해 MyBatis에서는 Param을 사용해 이름을 사용할 수 있음
+	// 2개 이상의 데이터를 파라미터로 전달하기위해 MyBatis에서는 Param을 사용해 파라미더에 이름을 붙여 사용할 수 있음
 	public List<ReplyVO> getListWithPaging(
 			@Param("cri") Criteria cri,
 			@Param("bno") Long bno);
+	
+	public int getCountByBno(Long bno);
 }

@@ -76,7 +76,7 @@
 			
 			
 			<div class="panel-body">
-				<ul class="chat">
+				<ul class="comment">
 <!-- 					<li class="left clearfix" data-rno='12'>
 						<div>
 							<div class="header">
@@ -86,6 +86,10 @@
 							<p>Good Job!</p>
 						</div> -->
 				</ul>
+			</div>
+			
+			<div class="panel-footer">
+				
 			</div>
 		</div>
 	</div>
@@ -130,80 +134,121 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	
-	console.log("=======")
-	console.log("JS TEST")
-	
-/* 	var bnoValue = '<c:out value="${board.bno}"/>'
-	
-	replyService.add(
-		{reply:"JS Test", replyer:"tester", bno:bnoValue},
-		function(result) {
-			alert("RESULT: " + result)
-		}
-	) */
-	
-/* 	var bnoValue = '<c:out value="${board.bno}"/>'
-	
-	replyService.getList({bno:bnoValue, page:1}, function(list) {
-		for(var i = 0, len = list.length||0; i < len; i++) {
-			console.log(list[i]);
-		}
-	}) */
-	
-/* 	replyService.remove(10, function(count) {
-		
-		console.log(count)
-		
-		if (count === "success") {
-			alert("REMOVED")
-		}
-	}, function(err) {
-		alert('ERROR...')
-	}) */
-	
-/* 	var bnoValue = '<c:out value="${board.bno}"/>'
-	
-	replyService.update({
-		rno: 2,
-		bno: bnoValue,
-		reply: "Modified Reply....",
-	}, function(result) {
-		alert("수정 완료...")
-	}) */
-	
-/* 	replyService.get(9, function(data) {
-		console.log(data)
-	}) */
 
 
 var bnoValue = '<c:out value="${board.bno}"/>'
-var replyUL = $(".chat")
+var replyUL = $(".comment")
 
 showList(1)
 
 function showList(page) {
 	
 	replyService.getList({bno:bnoValue, page: page || 1},
-				function(list) {
-		
-		var str = ""
-		if (list == null || list.length == 0) {
-			replyUL.html("")
 			
-			return
-		}
-		
-		for (var i=0, len=list.length || 0; i < len; i++) {
-			str += "<li class='left clearfix' data-rno='" + list[i].rno + "'>"
-			str += "	<div><div class='header'><strong class='primary-font'>" + list[i].replyer + "</string>"
-			str += "		<small class='pull-right text-muted'>" + replyService.displayTime(list[i].replyDate) + "</small></div>"
-			str += "		<p>" + list[i].reply + "</p></div></li>"
-		}
-		
-		replyUL.html(str)
-	})
+			function(replyCnt, list) {
+				
+				// page parameter에 -1 전달 시 마지막 페이지를 argument로 전달 하면서 showList 다시 호출
+				if (page == -1) {
+					pageNum = Math.ceil(replyCnt/10.0)
+					showList(pageNum)
+					return
+				}
+				
+				var str=""
+				
+				if(list == null || list.length == 0) {
+					return
+				}
+				
+				for (var i = 0, len = list.length || 0; i < len; i++) {
+					str += "<li class='left clearfix' data-rno='" + list[i].rno + "'>"
+					str += "	<div><div class='header'><strong class='primary-font'>[" + list[i].rno + "] " + list[i].replyer + "</strong>"
+					str += "		<small class='pull-right text-muted'>" + replyService.displayTime(list[i].replyDate)+ "</small></div>"
+					str += "			<p>" + list[i].reply + "</p></div></li>"
+				}
+				
+				replyUL.html(str)
+				
+				console.log("여기까지오나요?", pageNum)
+				showReplyPage(replyCnt)
+			}
+	)
+	
+
 }
+
+var pageNum = 1
+var replyPageFooter = $(".panel-footer")
+
+function showReplyPage(replyCnt) {
+	
+	// 나열된 페이지 번호의 마지막 넘버 구하기
+	var endNum = Math.ceil(pageNum / 10.0) * 10
+	
+	// 마지막 넘버를 기준으로 첫번째 넘버 구하기
+	var startNum = endNum - 9
+	
+	// 첫 페이지가 1이 아닐 때 (1보다 클 때) true 반환
+	var prev = startNum != 1
+	var next = false
+	
+	// 마지막 페이지 넘버에 10을 곱했을 때(한페이지에 10개씩 나타내므로) 실제 총 댓글수보다 크다면
+	if (endNum * 10 >= replyCnt) {
+		// 마지막 넘버를 총 댓글 갯수에 맞춤
+		endNum = Math.ceil( replyCnt / 10.0 )
+	}
+	
+	// 마지막 페이지 넘버가 (10단위) 총 댓글 수보다 작을 경우 next 값 true
+	if (endNum * 10 < replyCnt) {
+		next = true
+	}
+	
+	var str = "<ul class='pagination pull-right'>"
+	
+	// 페이지네이션의 첫번째 페이지가 1보다 클 때
+	if (prev) {
+		str += "<li class='page-item'><a class='page-link' href='" + (startNum -1) + "'>Previous</a></li>"
+	}
+	
+	for (var i = startNum; i <= endNum; i++) {
+		
+		// 페이지네이션을 그리다가 현재페이지넘버와 일치하면 active 속성
+		var active = pageNum == i ? "active" : ""
+		
+		str += "<li class='page-item  " + active + "'><a class='page-link' href='" + i + "'>" + i + "</a></li>"
+	}
+	
+	if (next) {
+
+		str += "<li class='page-item'><a class='page-link' href='" + (endNum + 1) + "'>Next</a></li>"
+	}
+	
+	str += "</ul></div>"
+	
+
+	
+	replyPageFooter.html(str)
+}
+
+// 페이지 넘버 클릭 시
+replyPageFooter.on("click", "li a", function(e) {
+	// 기본 기능 막기
+	e.preventDefault()
+	
+
+	
+	// 페이지 넘버 앵커의 href 속성 가져오기
+	var targetPageNum = $(this).attr("href")
+	
+	pageNum = targetPageNum
+	console.log("페이지 클릭으로 페이지 넘버 바뀜 ", pageNum)
+	
+
+	
+	// 페이지 넘버 앵커의 href 속성값을 showList의 argument로 전달
+	showList(pageNum)
+})
+console.log("아아아!!!", pageNum)
 	
 	var modal = $(".modal")
 	var modalInputReply = modal.find("input[name='reply']")
@@ -239,7 +284,55 @@ function showList(page) {
 			modal.find("input").val("")
 			modal.modal("hide")
 			
-			showList(1)
+			// showList(1)
+			showList(-1) // 새 댓글 등록 시 댓글 맨 마지막 페이지로 이동
+		})
+	})
+	
+	modalModBtn.on("click", function(e) {
+		
+		var reply = {rno: modal.data("rno"), reply: modalInputReply.val()}
+		
+		replyService.update(reply, function(result) {
+			
+			alert(result)
+			modal.modal("hide")
+
+			// 페이지넘버를 클릭할 때마다 pageNum에 페이지넘버가 할당되므로 보고 있던 리스트의 페이지를 다시 불러올 수 있게 pageNum을 argument로 전달하며 리스트 다시 호출
+			showList(pageNum)
+		})
+	})
+	
+	modalRemoveBtn.on("click", function(e) {
+		
+		var rno = modal.data("rno")
+		
+		replyService.remove(rno, function(result) {
+			
+			alert(result)
+			modal.modal("hide")
+			showList(pageNum)
+		})
+	})
+	
+	// comment를 이용해 이벤트를 처리하고 나중에 생성되는 li를 파라미터로 지정해서 실제 이벤트 대상으로 함
+	$(".comment").on("click", "li", function(e) {
+		
+		var rno = $(this).data("rno")
+		
+		replyService.get(rno, function(reply) {
+			modalInputReply.val(reply.reply)
+			modalInputReplyer.val(reply.replyer)
+			modalInputReplyDate.val(replyService.displayTime(reply.replyDate))
+			.attr("readonly", "readonly") // modal - input의 attribute에 readonly 추가
+			
+			modal.data("rno", reply.rno)
+			
+			modal.find("button[id != 'modalCloseBtn']").hide()
+			modalModBtn.show()
+			modalRemoveBtn.show()
+			
+			$(".modal").modal("show")
 		})
 	})
 })

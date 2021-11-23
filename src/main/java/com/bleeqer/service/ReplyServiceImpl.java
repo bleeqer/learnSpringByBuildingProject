@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bleeqer.domain.BoardVO;
 import com.bleeqer.domain.Criteria;
+import com.bleeqer.domain.ReplyPageDTO;
 import com.bleeqer.domain.ReplyVO;
 import com.bleeqer.mapper.ReplyMapper;
 
@@ -60,9 +60,12 @@ public class ReplyServiceImpl implements ReplyService {
 		
 		return mapper.getListWithPaging(cri, bno);
 	}
-
-
-
-
-
+	
+	@Override
+	public ReplyPageDTO getListPage(Criteria cri, Long bno) {
+		
+		return new ReplyPageDTO(
+				mapper.getCountByBno(bno),
+				mapper.getListWithPaging(cri, bno));
+	}
 }
