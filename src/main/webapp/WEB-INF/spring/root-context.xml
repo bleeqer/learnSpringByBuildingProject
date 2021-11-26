@@ -3,9 +3,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
 
@@ -30,13 +34,22 @@
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
 
-	<mybatis-spring:scan
-		base-package="com.bleeqer.mapper" />
+	<mybatis-spring:scan base-package="com.bleeqer.mapper"/>
 
-	<context:component-scan
-		base-package="com.bleeqer.service"></context:component-scan>
+	<context:component-scan base-package="com.bleeqer.service"></context:component-scan>
 
-<!-- 	<context:component-scan
-		base-package="com.bleeqer.controller"></context:component-scan> -->
+	<context:annotation-config></context:annotation-config>
+
+	<context:component-scan base-package="com.bleeqer.aop"></context:component-scan>
+	
+	<!-- target이 자동으로 advice를 거쳐서 호출되게 함 -->
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	
+	<!-- 어노테이션 기반으로 트랜잭션 설정을 가능하게 함 -->
+	<tx:annotation-driven/>
 </beans>
