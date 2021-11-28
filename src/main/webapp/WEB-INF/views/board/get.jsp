@@ -1,68 +1,120 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-  pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@include file="../includes/header.jsp"%>
 
+<style>
+.uploadResult {
+  width:100%;
+  background-color: gray;
+}
+.uploadResult ul{
+  display:flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+}
+.uploadResult ul li {
+  list-style: none;
+  padding: 10px;
+  align-content: center;
+  text-align: center;
+}
+.uploadResult ul li img{
+  width: 100px;
+}
+.uploadResult ul li span {
+  color:white;
+}
+.bigPictureWrapper {
+  position: absolute;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  top:0%;
+  width:100%;
+  height:100%;
+  background-color: gray; 
+  z-index: 100;
+  background:rgba(255,255,255,0.5);
+}
+.bigPicture {
+  position: relative;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bigPicture img {
+  width:600px;
+}
+
+</style>
+
 
 <div class="row">
-  <div class="col-lg-12">
-    <h1 class="page-header">Read Post</h1>
-  </div>
-  <!-- /.col-lg-12 -->
+	<div class="col-lg-12">
+		<h1 class="page-header">Read Post</h1>
+	</div>
+	<!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
 
 <div class="row">
-  <div class="col-lg-12">
-    <div class="panel panel-default">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
 
-      <div class="panel-heading">Post View</div>
-      <!-- /.panel-heading -->
-      <div class="panel-body">
+			<div class="panel-heading">Post View</div>
+			<!-- /.panel-heading -->
+			<div class="panel-body">
 
-          <div class="form-group">
-          <label>Bno</label> 
-          <input class="form-control" name='bno' value='<c:out value="${board.bno }"/>' readonly="readonly">
-        </div>
+				<div class="form-group">
+					<label>Bno</label> <input class="form-control" name='bno'
+						value='<c:out value="${board.bno}"/>' readonly="readonly">
+				</div>
 
-        <div class="form-group">
-          <label>Title</label> 
-          <input class="form-control" name='title' value='<c:out value="${board.title }"/>' readonly="readonly">
-        </div>
+				<div class="form-group">
+					<label>Title</label> <input class="form-control" name='title'
+						value='<c:out value="${board.title}"/>' readonly="readonly">
+				</div>
 
-        <div class="form-group">
-          <label>Text area</label>
-          <textarea class="form-control" rows="3" name='content' readonly="readonly"><c:out value="${board.content}" />
+				<div class="form-group">
+					<label>Text area</label>
+					<textarea class="form-control" rows="3" name='content'
+						readonly="readonly"><c:out value="${board.content}" />
           </textarea>
-        </div>
+				</div>
 
-        <div class="form-group">
-          <label>Writer</label> 
-          <input class="form-control" name='writer' value='<c:out value="${board.writer }"/>' readonly="readonly">
-        </div>
-		
-		<!-- 추후 다양한 상황을 처리하기 위해 form 태그와 자바스크립트로 구현 -->
- 		<button data-oper='modify' class="btn btn-default">Modify</button>
-        <button data-oper='list' class="btn btn-info">>List</button>
-        
-        <!-- 필요한 데이터 전달 목적 -->
-        <form id='operForm' action="/board/modify" method="get">
-        	<input type='hidden' id='bno' name='bno' value='<c:out value="${board.bno}"/>'>
-        	<input type='hidden' name='pageNum' value='<c:out value="${cri.pageNum}"/>'>
-        	<input type='hidden' name='amount' value='<c:out value="${cri.amount}"/>'>
-        	<input type='hidden' name='keyword' value='<c:out value="${cri.keyword}"/>'>
-        	<input type='hidden' name='type' value='<c:out value="${cri.type}"/>'>
-        </form>
+				<div class="form-group">
+					<label>Writer</label> <input class="form-control" name='writer'
+						value='<c:out value="${board.writer }"/>' readonly="readonly">
+				</div>
+
+				<!-- 추후 다양한 상황을 처리하기 위해 form 태그와 자바스크립트로 구현 -->
+				<button data-oper='modify' class="btn btn-default">Modify</button>
+				<button data-oper='list' class="btn btn-info">>List</button>
+
+				<!-- 필요한 데이터 전달 목적 -->
+				<form id='operForm' action="/board/modify" method="get">
+					<input type='hidden' id='bno' name='bno'
+						value='<c:out value="${board.bno}"/>'> <input
+						type='hidden' name='pageNum'
+						value='<c:out value="${cri.pageNum}"/>'> <input
+						type='hidden' name='amount' value='<c:out value="${cri.amount}"/>'>
+					<input type='hidden' name='keyword'
+						value='<c:out value="${cri.keyword}"/>'> <input
+						type='hidden' name='type' value='<c:out value="${cri.type}"/>'>
+				</form>
 
 
-      </div>
-      <!--  end panel-body -->
+			</div>
+			<!--  end panel-body -->
 
-    </div>
-    <!--  end panel-body -->
-  </div>
-  <!-- end panel -->
+		</div>
+		<!--  end panel-body -->
+	</div>
+	<!-- end panel -->
 </div>
 <!-- /.row -->
 
@@ -71,13 +123,14 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<i class="fa fa-comments fa-fw"><</i> Reply
-				<button id='addReplyBtn' class='btn btn-primary btn-xs pull-right'>New Reply</button>
+				<button id='addReplyBtn' class='btn btn-primary btn-xs pull-right'>New
+					Reply</button>
 			</div>
-			
-			
+
+
 			<div class="panel-body">
 				<ul class="comment">
-<!-- 					<li class="left clearfix" data-rno='12'>
+					<!-- 					<li class="left clearfix" data-rno='12'>
 						<div>
 							<div class="header">
 								<Strong class="primary-font"></Strong>
@@ -87,54 +140,115 @@
 						</div> -->
 				</ul>
 			</div>
-			
-			<div class="panel-footer">
-				
-			</div>
+
+			<div class="panel-footer"></div>
 		</div>
 	</div>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
-	    <div class="modal-content">
-	        <div class="modal-header">
-	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	            <h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
-	        </div>
-	        <div class="modal-body">
-	        	<div class="form-group">
-	        		<label>Reply</label>
-	        		<input class="form-control" name='reply' value='New Reply!'>
-	        	</div>
-	        	<div class="form-group">
-	        		<label>Replyer</label>
-	        		<input class="form-control" name='replyer' value='replyer'>
-	        	</div>
-	        	<div class="form-group">
-	        		<label>Reply Date</label>
-	        		<input class="form-control" name='replyDate' value=''>
-	        	</div>
-	        </div>
-	        <div class="modal-footer">
-	            <button id='modalModBtn' type="button" class="btn btn-warning">Modify</button>
-	            <button id='modalRemoveBtn' type="button" class="btn btn-danger">Remove</button>
-	            <button id='modalCreateBtn' type="button" class="btn btn-primary">Create</button>
-	            <button id='modalCloseBtn' type="button" class="btn btn-default" data-dismiss='modal'>Close</button>
-	        </div>
-	    </div>
-	    <!-- /.modal-content -->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Reply</label> <input class="form-control" name='reply'
+						value='New Reply!'>
+				</div>
+				<div class="form-group">
+					<label>Replyer</label> <input class="form-control" name='replyer'
+						value='replyer'>
+				</div>
+				<div class="form-group">
+					<label>Reply Date</label> <input class="form-control"
+						name='replyDate' value=''>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id='modalModBtn' type="button" class="btn btn-warning">Modify</button>
+				<button id='modalRemoveBtn' type="button" class="btn btn-danger">Remove</button>
+				<button id='modalCreateBtn' type="button" class="btn btn-primary">Create</button>
+				<button id='modalCloseBtn' type="button" class="btn btn-default"
+					data-dismiss='modal'>Close</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
 	</div>
 	<!-- /.modal-dialog -->
 </div>
 <!-- /.Modal -->
 
+<div class='bigPictureWrapper'>
+	<div class='bigPicture'></div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+
+			<div class="panel-heading">Files</div>
+			<!-- /.panel-heading -->
+			<div class="panel-body">
+
+				<div class='uploadResult'>
+					<ul>
+					</ul>
+				</div>
+			</div>
+			<!--  end panel-body -->
+		</div>
+		<!--  end panel-body -->
+	</div>
+	<!-- end panel -->
+</div>
+<!-- /.row -->
+
 <script type="text/javascript" src="/resources/js/reply.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {
-
+	
+	(function() {
+		
+		var bno = '<c:out value="${board.bno}"/>'
+		
+		// 페이지가 로드되자마자 해당 요청으로 JSON 반환 받음
+		$.getJSON("/board/getAttachList", {bno: bno}, function(arr) {
+			
+			var str = ""
+			
+			$(arr).each(function(i, attach) {
+				
+				if (attach.fileType) {
+					
+					var fileCallPath =  encodeURIComponent( attach.uploadPath+ "/s_"+attach.uuid +"_"+attach.fileName)
+					
+					str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='" + attach.fileName + "' data-type='" + attach.fileType+"' ><div>"
+		            str += "<img src='/display?fileName=" + fileCallPath + "'>"
+		            str += "</div>"
+		            str += "</li>"
+		            
+			    } else {
+			             
+		            str += "<li data-path='" + attach.uploadPath + "' data-uuid='" + attach.uuid + "' data-filename='" + attach.fileName + "' data-type='"+attach.fileType+"' ><div>"
+		            str += "<span> " + attach.fileName + "</span><br/>"
+		            str += "<img src='/resources/img/noneImageIcon.png'></a>"
+		            str += "</div>"
+		            str += "</li>"
+		            
+			    }
+				
+				$(".uploadResult ul").html(str)
+				
+			})
+		})
+	})()
 
 var bnoValue = '<c:out value="${board.bno}"/>'
 var replyUL = $(".comment")
@@ -231,7 +345,7 @@ function showReplyPage(replyCnt) {
 }
 
 // 페이지 넘버 클릭 시
-replyPageFooter.on("click", "li a", function(e) {
+	replyPageFooter.on("click", "li a", function(e) {
 	// 기본 기능 막기
 	e.preventDefault()
 	
@@ -248,7 +362,6 @@ replyPageFooter.on("click", "li a", function(e) {
 	// 페이지 넘버 앵커의 href 속성값을 showList의 argument로 전달
 	showList(pageNum)
 })
-console.log("아아아!!!", pageNum)
 	
 	var modal = $(".modal")
 	var modalInputReply = modal.find("input[name='reply']")
@@ -335,32 +448,66 @@ console.log("아아아!!!", pageNum)
 			$(".modal").modal("show")
 		})
 	})
+	
+	$(document).ready(function() {
+  
+	    var operForm = $("#operForm")
+	  
+	    $("button[data-oper='modify']").on("click", function(e){
+	    
+	      operForm.attr("action","/board/modify").submit()
+	    
+	    })
+	  
+	    
+	    $("button[data-oper='list']").on("click", function(e){
+	    
+		  /* 데이터가 필요 없으므로 bno 삭제하고 이동 */
+	      operForm.find("#bno").remove()
+	      operForm.attr("action","/board/list")
+	      operForm.submit()
+	    
+	    })
+    })
+    
+    $(".uploadResult").on("click", "li", function(e) {
+    	
+    	var liObj = $(this)
+    	
+    	var path = encodeURIComponent(liObj.data("path") + "/" + liObj.data("uuid") + "_" + liObj.data("filename"))
+    	
+    	console.log(path.replace(new RegExp(/\\/g), "/"))
+    	
+    	if (liObj.data("type")) {
+    		
+    		showImage(path.replace(new RegExp(/\\/g), "/"))
+    		
+    	} else {
+    		
+    		self.location = "/download?fileName=" + path
+    	}
+    })
+    
+    function showImage(fileCallPath){
+	    
+	    $(".bigPictureWrapper").css("display","flex").show();
+	    
+	    $(".bigPicture")
+	    .html("<img src='/display?fileName=" + fileCallPath + "' >")
+	    .animate({width:'100%', height: '100%'}, 1000);
+	    
+	  }
+
+	  $(".bigPictureWrapper").on("click", function(e){
+	    $(".bigPicture").animate({width:'0%', height: '0%'}, 1000);
+	    setTimeout(function(){
+	      $('.bigPictureWrapper').hide();
+	    }, 1000);
+	  });
 })
 
 </script>
 
-<script type="text/javascript">
-$(document).ready(function() {
-  
-  var operForm = $("#operForm"); 
-  
-  $("button[data-oper='modify']").on("click", function(e){
-    
-    operForm.attr("action","/board/modify").submit();
-    
-  });
-  
-    
-  $("button[data-oper='list']").on("click", function(e){
-    
-	/* 데이터가 필요 없으므로 bno 삭제하고 이동 */
-    operForm.find("#bno").remove();
-    operForm.attr("action","/board/list")
-    operForm.submit();
-    
-  });  
-});
-</script>
 
 
 <%@include file="../includes/footer.jsp"%>

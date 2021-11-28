@@ -2,6 +2,7 @@ package com.bleeqer.service;
 
 import java.util.List;
 
+import com.bleeqer.domain.BoardAttachVO;
 import com.bleeqer.domain.BoardVO;
 import com.bleeqer.domain.Criteria;
 
@@ -18,5 +19,7 @@ public interface BoardService {
 	public List<BoardVO> getList(Criteria cri);
 	
 	public int getTotal(Criteria cri);
+	
+	public List<BoardAttachVO> getAttachList(Long bno);
 	
 }
